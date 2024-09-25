@@ -1,32 +1,33 @@
-from typing import Any
-from django.db.models.query import QuerySet
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView
 from .forms import ReviewForm
 from .models import Review
 
 
-class ReviewView(View):
-    def get(self, request):
-        form = ReviewForm()
+class ReviewView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "reviews/review.html"
+    success_url = "/thank-you"
 
-        return render(request, "reviews/review.html", {
-            "form": form
-        })
+    # def get(self, request):
+    #     form = ReviewForm()
 
-    def post(self, request):
-        form = ReviewForm(request.POST)
+    #     return render(request, "reviews/review.html", {
+    #         "form": form
+    #     })
 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/thank-you")
+    # def post(self, request):
+    #     form = ReviewForm(request.POST)
 
-        return render(request, "reviews/review.html", {
-            "form": form
-        })
+    #     if form.is_valid():
+    #         form.save()
+    #         return HttpResponseRedirect("/thank-you")
+
+    #     return render(request, "reviews/review.html", {
+    #         "form": form
+    #     })
 
 
 class ThankYouView(TemplateView):
